@@ -9,6 +9,14 @@ jest.mock('axios', () => ({
     post: jest.fn(),
     put: jest.fn(),
     delete: jest.fn(),
+    interceptors: {
+      request: {
+        use: jest.fn()
+      },
+      response: {
+        use: jest.fn()
+      }
+    },
     defaults: { baseURL: 'http://localhost:5000/api' }
   }),
   defaults: { baseURL: 'http://localhost:5000/api' }

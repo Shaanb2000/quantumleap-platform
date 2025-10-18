@@ -42,7 +42,7 @@ jobs:
     - name: Run frontend tests
       run: |
         cd client
-        npm test --if-present -- --coverage --watchAll=false
+        npm test --if-present
     
     - name: Build frontend
       run: |
