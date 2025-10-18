@@ -22,10 +22,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: |
-          package-lock.json
-          server/package-lock.json
-          client/package-lock.json
     
     - name: Install dependencies
       run: |
@@ -33,10 +29,12 @@ jobs:
         npm config set registry https://registry.npmjs.org/
         npm config set fetch-retry-mintimeout 20000
         npm config set fetch-retry-maxtimeout 120000
-        npm config set fetch-retries 3
-        npm install --no-optional --legacy-peer-deps --maxsockets 1
-        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1
-        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1
+        npm config set fetch-retries 5
+        npm config set audit false
+        npm config set fund false
+        npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
+        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
+        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
     
     - name: Run backend tests
       run: |
@@ -82,10 +80,12 @@ jobs:
         npm config set registry https://registry.npmjs.org/
         npm config set fetch-retry-mintimeout 20000
         npm config set fetch-retry-maxtimeout 120000
-        npm config set fetch-retries 3
-        npm install --no-optional --legacy-peer-deps --maxsockets 1
-        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1
-        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1
+        npm config set fetch-retries 5
+        npm config set audit false
+        npm config set fund false
+        npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
+        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
+        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
     
     - name: Build frontend
       run: |
