@@ -25,7 +25,9 @@ jobs:
     
     - name: Install dependencies
       run: |
-        npm run install-all
+        npm install
+        npm install --prefix server
+        npm install --prefix client
     
     - name: Run backend tests
       run: |
@@ -67,7 +69,9 @@ jobs:
     
     - name: Install dependencies
       run: |
-        npm run install-all
+        npm install
+        npm install --prefix server
+        npm install --prefix client
     
     - name: Build frontend
       run: |
