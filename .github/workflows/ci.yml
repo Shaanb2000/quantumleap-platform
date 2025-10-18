@@ -27,7 +27,6 @@ jobs:
         npm config set fetch-retries 3
         npm config set audit false
         npm config set fund false
-        npm config set warn false
         echo "Installing root dependencies..."
         npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Root install completed with warnings"
         echo "Installing server dependencies..."
@@ -81,7 +80,6 @@ jobs:
         npm config set fetch-retries 3
         npm config set audit false
         npm config set fund false
-        npm config set warn false
         echo "Installing root dependencies..."
         npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Root install completed with warnings"
         echo "Installing server dependencies..."
