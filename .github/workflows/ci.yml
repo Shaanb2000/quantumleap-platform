@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     strategy:
       matrix:
@@ -31,9 +32,10 @@ jobs:
         npm config set fetch-retries 5
         npm config set audit false
         npm config set fund false
-        npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
-        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
-        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
+        npm config set warn false
+        npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent
+        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent
+        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent
     
     - name: Run backend tests
       run: |
@@ -63,6 +65,7 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v3
@@ -81,9 +84,10 @@ jobs:
         npm config set fetch-retries 5
         npm config set audit false
         npm config set fund false
-        npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
-        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
-        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund
+        npm config set warn false
+        npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent
+        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent
+        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent
     
     - name: Build frontend
       run: |
