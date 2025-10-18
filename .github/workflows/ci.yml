@@ -22,12 +22,21 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: |
+          package-lock.json
+          server/package-lock.json
+          client/package-lock.json
     
     - name: Install dependencies
       run: |
-        npm install
-        npm install --prefix server
-        npm install --prefix client
+        npm cache clean --force
+        npm config set registry https://registry.npmjs.org/
+        npm config set fetch-retry-mintimeout 20000
+        npm config set fetch-retry-maxtimeout 120000
+        npm config set fetch-retries 3
+        npm install --no-optional --legacy-peer-deps --maxsockets 1
+        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1
+        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1
     
     - name: Run backend tests
       run: |
@@ -69,9 +78,14 @@ jobs:
     
     - name: Install dependencies
       run: |
-        npm install
-        npm install --prefix server
-        npm install --prefix client
+        npm cache clean --force
+        npm config set registry https://registry.npmjs.org/
+        npm config set fetch-retry-mintimeout 20000
+        npm config set fetch-retry-maxtimeout 120000
+        npm config set fetch-retries 3
+        npm install --no-optional --legacy-peer-deps --maxsockets 1
+        npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1
+        npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1
     
     - name: Build frontend
       run: |
