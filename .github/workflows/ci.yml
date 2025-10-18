@@ -47,6 +47,8 @@ jobs:
     - name: Build frontend
       run: |
         cd client
+        pwd
+        ls -la public/
         npm run build
     
     - name: Lint backend
