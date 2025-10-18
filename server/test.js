@@ -40,9 +40,40 @@ describe('QuantumLeap API Tests', () => {
     });
 
     it('should not register user with existing email', async () => {
-      const userData = {
+      // First register a user
+      const userData1 = {
+        name: 'Test User 1',
+        email: 'existing@example.com',
+        password: 'password123',
+        interests: ['AI']
+      };
+
+      await request(app)
+        .post('/api/auth/register')
+        .send(userData1)
+        .expect(201);
+
+      // Try to register with same email
+      const userData2 = {
         name: 'Test User 2',
-        email: 'test@example.com',
+        email: 'existing@example.com',
+        password: 'password123',
+        interests: ['AI']
+      };
+
+      await request(app)
+        .post('/api/auth/register')
+        .send(userData2)
+        .expect(400);
+    });
+  });
+
+  describe('POST /api/auth/login', () => {
+    it('should login with valid credentials', async () => {
+      // First register a user
+      const userData = {
+        name: 'Login Test User',
+        email: 'login@example.com',
         password: 'password123',
         interests: ['AI']
       };
@@ -50,14 +81,11 @@ describe('QuantumLeap API Tests', () => {
       await request(app)
         .post('/api/auth/register')
         .send(userData)
-        .expect(400);
-    });
-  });
+        .expect(201);
 
-  describe('POST /api/auth/login', () => {
-    it('should login with valid credentials', async () => {
+      // Now try to login
       const loginData = {
-        email: 'test@example.com',
+        email: 'login@example.com',
         password: 'password123'
       };
 
@@ -130,9 +158,24 @@ describe('QuantumLeap API Tests', () => {
   // Test AI suggestions
   describe('POST /api/ai/suggest', () => {
     it('should get AI suggestions', async () => {
+      // First register a user and get token
+      const userData = {
+        name: 'AI Test User',
+        email: 'ai@example.com',
+        password: 'password123',
+        interests: ['AI']
+      };
+
+      const registerRes = await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(201);
+
+      const token = registerRes.body.token;
+
       const res = await request(app)
         .post('/api/ai/suggest')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${token}`)
         .send({
           type: 'feedback',
           context: 'React project'
@@ -147,13 +190,28 @@ describe('QuantumLeap API Tests', () => {
   // Test protected routes
   describe('GET /api/auth/me', () => {
     it('should get current user with valid token', async () => {
+      // First register a user and get token
+      const userData = {
+        name: 'Me Test User',
+        email: 'me@example.com',
+        password: 'password123',
+        interests: ['AI']
+      };
+
+      const registerRes = await request(app)
+        .post('/api/auth/register')
+        .send(userData)
+        .expect(201);
+
+      const token = registerRes.body.token;
+
       const res = await request(app)
         .get('/api/auth/me')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200);
 
       expect(res.body.user).toBeDefined();
-      expect(res.body.user.email).toBe('test@example.com');
+      expect(res.body.user.email).toBe('me@example.com');
     });
 
     it('should not get user without token', async () => {
