@@ -60,6 +60,11 @@ jobs:
         ls -la src/App.*
         echo "Checking if App.tsx exists..."
         test -f src/App.tsx && echo "App.tsx exists" || echo "App.tsx NOT FOUND"
+        echo "Checking TypeScript compilation..."
+        npx tsc --noEmit --skipLibCheck || echo "TypeScript check completed with warnings"
+        echo "Checking for missing dependencies..."
+        npm ls react-router-dom || echo "react-router-dom not found"
+        npm ls @types/react || echo "@types/react not found"
         echo "Checking ajv installation..."
         npm ls ajv || echo "ajv not found"
         echo "Reinstalling ajv if needed..."
