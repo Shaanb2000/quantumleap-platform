@@ -1,3 +1,15 @@
+// Mock axios before importing
+jest.mock('axios', () => ({
+  create: jest.fn(() => ({
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+    defaults: { baseURL: 'http://localhost:5000/api' }
+  })),
+  defaults: { baseURL: 'http://localhost:5000/api' }
+}));
+
 import { api } from './api';
 
 describe('API utility', () => {

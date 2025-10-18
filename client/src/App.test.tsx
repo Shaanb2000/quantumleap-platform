@@ -25,7 +25,20 @@ jest.mock('./contexts/ThemeContext', () => ({
 jest.mock('react-router-dom', () => ({
   BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Routes: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  Route: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+  Route: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Link: ({ children, to }: { children: React.ReactNode; to?: string }) => <a href={to}>{children}</a>
+}));
+
+// Mock axios
+jest.mock('axios', () => ({
+  create: () => ({
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+    defaults: { baseURL: 'http://localhost:5000/api' }
+  }),
+  defaults: { baseURL: 'http://localhost:5000/api' }
 }));
 
 describe('App', () => {

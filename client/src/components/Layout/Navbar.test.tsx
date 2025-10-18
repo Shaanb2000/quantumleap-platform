@@ -22,8 +22,9 @@ jest.mock('../../contexts/ThemeContext', () => ({
 
 // Mock React Router
 jest.mock('react-router-dom', () => ({
-  Link: ({ children }: { children: React.ReactNode }) => <a>{children}</a>,
-  useNavigate: () => jest.fn()
+  Link: ({ children, to }: { children: React.ReactNode; to?: string }) => <a href={to}>{children}</a>,
+  useNavigate: () => jest.fn(),
+  useLocation: () => ({ pathname: '/' })
 }));
 
 describe('Navbar', () => {

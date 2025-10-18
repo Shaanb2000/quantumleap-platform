@@ -8,8 +8,14 @@ jest.mock('../contexts/AuthContext', () => ({
     user: null,
     login: jest.fn(),
     logout: jest.fn(),
-    loading: false
+    loading: false,
+    isAuthenticated: false
   })
+}));
+
+// Mock React Router
+jest.mock('react-router-dom', () => ({
+  Link: ({ children, to }: { children: React.ReactNode; to?: string }) => <a href={to}>{children}</a>
 }));
 
 describe('HomePage', () => {
