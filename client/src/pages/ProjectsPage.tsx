@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -26,11 +26,7 @@ const ProjectsPage: React.FC = () => {
     search: ''
   });
 
-  useEffect(() => {
-    fetchProjects();
-  }, [filters]);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -53,7 +49,11 @@ const ProjectsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {

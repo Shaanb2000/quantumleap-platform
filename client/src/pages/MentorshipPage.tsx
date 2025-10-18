@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 interface Mentor {
@@ -25,11 +25,7 @@ const MentorshipPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedDomain, setSelectedDomain] = useState('');
 
-  useEffect(() => {
-    fetchMentors();
-  }, [selectedDomain]);
-
-  const fetchMentors = async () => {
+  const fetchMentors = useCallback(async () => {
     try {
       const params = selectedDomain ? `?domain=${selectedDomain}` : '';
       const response = await axios.get(`/api/mentorship/mentors${params}`);
@@ -39,7 +35,11 @@ const MentorshipPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDomain]);
+
+  useEffect(() => {
+    fetchMentors();
+  }, [fetchMentors]);
 
   const domains = ['AI', 'Climate', 'Biotech', 'Marketing', 'Social Impact'];
 
