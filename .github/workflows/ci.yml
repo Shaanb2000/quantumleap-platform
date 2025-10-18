@@ -54,10 +54,17 @@ jobs:
         cd client
         pwd
         ls -la public/
+        echo "Checking src directory structure..."
+        ls -la src/
+        echo "Checking for App.tsx specifically..."
+        ls -la src/App.*
+        echo "Checking if App.tsx exists..."
+        test -f src/App.tsx && echo "App.tsx exists" || echo "App.tsx NOT FOUND"
         echo "Checking ajv installation..."
         npm ls ajv || echo "ajv not found"
         echo "Reinstalling ajv if needed..."
         npm install ajv@^8.0.0 --save-dev || echo "ajv reinstall completed with warnings"
+        echo "Attempting to build..."
         npm run build
     
     - name: Lint backend
