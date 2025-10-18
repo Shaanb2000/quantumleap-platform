@@ -27,12 +27,17 @@ jobs:
         npm config set fetch-retries 3
         npm config set audit false
         npm config set fund false
+        echo "Cleaning npm cache..."
+        npm cache clean --force || echo "Cache clean completed with warnings"
         echo "Installing root dependencies..."
         npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Root install completed with warnings"
         echo "Installing server dependencies..."
         npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Server install completed with warnings"
         echo "Installing client dependencies..."
         npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Client install completed with warnings"
+        echo "Verifying client dependencies..."
+        cd client && npm ls ajv || echo "ajv not found, will reinstall"
+        cd client && npm install ajv --save-dev || echo "ajv install completed with warnings"
     
     - name: Run backend tests
       run: |
@@ -49,6 +54,10 @@ jobs:
         cd client
         pwd
         ls -la public/
+        echo "Checking ajv installation..."
+        npm ls ajv || echo "ajv not found"
+        echo "Reinstalling ajv if needed..."
+        npm install ajv@^8.0.0 --save-dev || echo "ajv reinstall completed with warnings"
         npm run build
     
     - name: Lint backend
@@ -82,12 +91,17 @@ jobs:
         npm config set fetch-retries 3
         npm config set audit false
         npm config set fund false
+        echo "Cleaning npm cache..."
+        npm cache clean --force || echo "Cache clean completed with warnings"
         echo "Installing root dependencies..."
         npm install --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Root install completed with warnings"
         echo "Installing server dependencies..."
         npm install --prefix server --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Server install completed with warnings"
         echo "Installing client dependencies..."
         npm install --prefix client --no-optional --legacy-peer-deps --maxsockets 1 --no-audit --no-fund --silent || echo "Client install completed with warnings"
+        echo "Verifying client dependencies..."
+        cd client && npm ls ajv || echo "ajv not found, will reinstall"
+        cd client && npm install ajv --save-dev || echo "ajv install completed with warnings"
     
     - name: Build frontend
       run: |
