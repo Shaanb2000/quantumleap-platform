@@ -69,6 +69,9 @@ jobs:
         npm ls ajv || echo "ajv not found"
         echo "Reinstalling ajv if needed..."
         npm install ajv@^8.0.0 --save-dev || echo "ajv reinstall completed with warnings"
+        echo "Fixing ajv dependency issues before build..."
+        npm uninstall ajv ajv-keywords || echo "ajv uninstall completed"
+        npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev || echo "ajv reinstall completed with warnings"
         echo "Attempting to build..."
         npm run build
     
@@ -118,6 +121,9 @@ jobs:
     - name: Build frontend
       run: |
         cd client
+        echo "Fixing ajv dependency issues before build..."
+        npm uninstall ajv ajv-keywords || echo "ajv uninstall completed"
+        npm install ajv@^8.17.1 ajv-keywords@^5.1.0 --save-dev || echo "ajv reinstall completed with warnings"
         npm run build
     
     - name: Upload build artifacts
