@@ -1,0 +1,95 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm run install-all
+    
+    - name: Run backend tests
+      run: |
+        cd server
+        npm test --if-present
+    
+    - name: Run frontend tests
+      run: |
+        cd client
+        npm test --if-present -- --coverage --watchAll=false
+    
+    - name: Build frontend
+      run: |
+        cd client
+        npm run build
+    
+    - name: Lint backend
+      run: |
+        cd server
+        npm run lint --if-present
+    
+    - name: Lint frontend
+      run: |
+        cd client
+        npm run lint --if-present
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm run install-all
+    
+    - name: Build frontend
+      run: |
+        cd client
+        npm run build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-files
+        path: |
+          client/build/
+          server/
+        retention-days: 1
+
+  deploy-preview:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Deploy preview
+      run: |
+        echo "Deploy preview for PR #${{ github.event.number }}"
+        echo "This would deploy to a preview environment"
