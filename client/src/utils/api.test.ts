@@ -13,16 +13,16 @@ jest.mock('axios', () => ({
         use: jest.fn()
       }
     },
-    defaults: { baseURL: 'http://localhost:5000/api' }
+    defaults: { baseURL: 'http://localhost:5000' }
   })),
   defaults: { baseURL: 'http://localhost:5000/api' }
 }));
 
-import { api } from './api';
+import api from './api';
 
 describe('API utility', () => {
   it('should have correct base URL', () => {
-    expect(api.defaults.baseURL).toBe('http://localhost:5000/api');
+    expect(api.defaults.baseURL).toBe('http://localhost:5000');
   });
 
   it('should be defined', () => {
